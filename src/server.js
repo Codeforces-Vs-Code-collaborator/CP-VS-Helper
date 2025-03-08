@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const runTest = require("./runTests"); // Uncomment if needed
 
 const app = express();
 const port = 10048;
@@ -9,33 +8,28 @@ const port = 10048;
 app.use(cors());
 app.use(bodyParser.json());
 
-let problemUrl = "";
+let problemData = null; //to store the problem data
 
 app.post('/', async (req, res) => {
     const { url } = req.body;
-    let nameOfProblem = req.body.name;
-    console.log(req.body);
-    console.log(nameOfProblem);
 
     if (!url) {
         return res.status(400).json({ message: "No URL provided!" });
     }
 
-    console.log("Received URL:", url);
-    problemUrl = url;
+    problemData = req.body; // store the body data since it will be needed by extension.js file
+    console.log("Received problem data:", problemData);
 
-    try {
-        // Uncomment if you have a runTest function
-        // await runTest(url); 
-        res.json({ message: `Tests started for URL: ${url}` });
-    } catch (error) {
-        console.error("Error running tests:", error);
-        res.status(500).json({ message: "Failed to run tests." });
+    res.json({ message: `Problem data received successfully!` });
+});
+
+app.get('/bodyData', (req, res) => {
+    if (!problemData) {
+        return res.status(404).json({ message: "No problem data available!" });
     }
+    res.json(problemData);  // send the stored data in json format
 });
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-
-// module.exports = { problemUrl };
