@@ -1,4 +1,4 @@
-# cp-vs-helper README
+# CP-CODE-RUNNER README
 
 This is the README for your extension "cp-vs-helper". After writing up a brief description, we recommend including the following sections.
 
