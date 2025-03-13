@@ -1,18 +1,19 @@
 const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
-const { exec, spawn } = require("child_process");  //to create the teminal and run the code 
+const { exec, spawn } = require("child_process");
 const axios = require("axios");
-const puppeteer = require("puppeteer-extra");  //not used aage
-const StealthPlugin = require("puppeteer-extra-plugin-stealth");  //not used aage
 
 let currentProblemData = null;
 let workspacePath = "";
+let outputChannel;
 
 async function processProblemData(jsonData) {
-  console.log("inside the process problem data");
+  outputChannel.appendLine("inside the process problem data");
   if (!jsonData || !jsonData.name || !jsonData.tests) {
-    console.log("Invalid problem data received:", jsonData);
+    outputChannel.appendLine(
+      "Invalid problem data received: " + JSON.stringify(jsonData)
+    );
     return;
   }
 
@@ -34,20 +35,32 @@ async function processProblemData(jsonData) {
 
   if (!fs.existsSync(workspacePath)) {
     fs.mkdirSync(workspacePath, { recursive: true });
-    console.log("Created workspace folder:", workspacePath);
+    outputChannel.appendLine("Created workspace folder: " + workspacePath);
   }
 
   const solutionPath = path.join(workspacePath, "solution.cpp");
   if (!fs.existsSync(solutionPath)) {
-    const boilerplate = `#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`;  //will update to my boilerplate code later, can give a command to user to select their cusom bioilerplpates later
+    const boilerplate = `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    // Write your solution here
+    return 0;
+}`;
     fs.writeFileSync(solutionPath, boilerplate);
-    console.log("Created solution.cpp with boilerplate.");
+    outputChannel.appendLine("Created solution.cpp with boilerplate.");
+
+    //enter the file as soon as it is created so that the user doesn't have to navigate
+    vscode.workspace.openTextDocument(solutionPath).then((doc) => {
+      vscode.window.showTextDocument(doc);
+    });
+    outputChannel.appendLine("Inside solution.cpp file");
   }
 }
 
 async function fetchProblemData() {
   try {
-    const response = await axios.get("http://localhost:10048/bodyData");  
+    const response = await axios.get("http://localhost:10048/bodyData");
     processProblemData(response.data);
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
@@ -55,72 +68,85 @@ async function fetchProblemData() {
 }
 
 async function executeTestCases(jsonData) {
-  console.log("inside the execute test cases");
+  outputChannel.appendLine("inside the execute test cases");
   if (!jsonData || !jsonData.name || !jsonData.tests) {
-    console.log("Invalid problem data received:", jsonData);
+    outputChannel.appendLine(
+      "Invalid problem data received: " + JSON.stringify(jsonData)
+    );
     return;
   }
   currentProblemData = jsonData;
   const problemName = jsonData.name.replace(/[^a-zA-Z0-9]/g, "_");
-  //we have the workspacePath gloablly stored provided we run the task
-  if (!workspacePath || workspacePath.length == 0) {
-    console.log(
-      "the workspace path is not defined, eecute the commands in sequence"
+  if (!workspacePath || workspacePath.length === 0) {
+    outputChannel.appendLine(
+      "The workspace path is not defined, execute the commands in sequence"
     );
     return;
   }
 
   const solutionPath = path.join(workspacePath, "solution.cpp");
   const executablePath = path.join(workspacePath, "solution");
-  const jsonFilePath = path.join(workspacePath, "data.json");
-
-  const tests = jsonData.tests; // Extract test cases
+  const tests = jsonData.tests;
 
   if (!Array.isArray(tests)) {
-      console.error("Invalid test cases format");
-      return;
+    outputChannel.appendLine("Invalid test cases format");
+    return;
   }
 
   const compileCommand = `g++ -o "${executablePath}" "${solutionPath}"`;
-  exec(compileCommand, { cwd: workspacePath }, (compileErr, _, compileStderr) => {
+  exec(
+    compileCommand,
+    { cwd: workspacePath },
+    (compileErr, _, compileStderr) => {
       if (compileErr) {
-          console.error("Compilation Error:\n", compileStderr);
-          return;
+        outputChannel.appendLine("Compilation Error:\n" + compileStderr);
+        return;
       }
-      console.log("Compilation Successful!\n");
+      outputChannel.appendLine("Compilation Successful!\n");
 
       tests.forEach((test, index) => {
-          console.log("------ FOR TEST CASE ------");
-          console.log(test.input);
-          const terminal = spawn(`${executablePath}`, { cwd: workspacePath, shell: true });
-          terminal.stdin.write(test.input);
-          terminal.stdin.end();
+        const terminal = spawn(`${executablePath}`, {
+          cwd: workspacePath,
+          shell: true,
+        });
+        terminal.stdin.write(test.input);
+        terminal.stdin.end();
 
-          let outputData = "";
+        let outputData = "";
 
-          terminal.stdout.on("data", (data) => {
-              outputData += data.toString();
-          });
+        terminal.stdout.on("data", (data) => {
+          outputData += data.toString();
+        });
 
-          terminal.stderr.on("data", (data) => {
-              console.error(`Error executing test case ${index + 1}:\n`, data.toString());
-          });
+        terminal.stderr.on("data", (data) => {
+          outputChannel.appendLine(
+            `Error executing test case ${index + 1}:\n` + data.toString()
+          );
+        });
 
-          terminal.on("close", () => {
-              console.log("------ YOUR OUTPUT IS ------");
-              console.log(outputData.trim());
-              console.log("------ CORRECT OUTPUT IS ------");
-              console.log(test.output.trim());
-              console.log("-----------------------------\n");
-              console.log("-----------------------------\n");
-          });
+        terminal.on("close", () => {
+          const ourOutput = outputData.trim();
+          const expectedOutput = test.output.trim();
+          const passed = ourOutput === expectedOutput;
+          const testStatus = passed ? "✅" : "❌";
+
+          outputChannel.appendLine(`Test Case ${index + 1}: ${testStatus}`);
+          outputChannel.appendLine("Input is:");
+          outputChannel.appendLine(test.input);
+          outputChannel.appendLine("Your output is:");
+          outputChannel.appendLine(ourOutput);
+          outputChannel.appendLine("Correct output is:");
+          outputChannel.appendLine(expectedOutput);
+          outputChannel.appendLine("-----------------------------\n");
+        });
       });
-  });
+    }
+  );
 }
 
 async function fetchDataToExecute() {
   try {
-    const response = await axios.get("http://localhost:10048/bodyData");  //isko fir se likhna pad raha hai correct it
+    const response = await axios.get("http://localhost:10048/bodyData");
     executeTestCases(response.data);
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
@@ -128,6 +154,9 @@ async function fetchDataToExecute() {
 }
 
 function activate(context) {
+  outputChannel = vscode.window.createOutputChannel("Test Cases Output");
+  outputChannel.show();
+
   console.log("Extension activated.");
   let runProblemCommand = vscode.commands.registerCommand(
     "extension.runProblem",
@@ -138,22 +167,17 @@ function activate(context) {
     "extension.compileAndRunTestCases",
     fetchDataToExecute
   );
+  context.subscriptions.push(compileAndRunTestCases);
 }
 
 function deactivate() {
+  if (outputChannel) {
+    outputChannel.dispose();
+  }
   console.log("Extension deactivated.");
 }
+
 module.exports = {
   activate,
   deactivate,
 };
-
-
-/*
-
-further suggestions
-
-files ko code wise organise karo in future
-
-
-*/
