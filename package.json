@@ -3,6 +3,7 @@
   "displayName": "CP VS Helper",
   "description": "A VS Code extension to help with competitive programming",
   "version": "0.0.1",
+  "publisher": "SahilMadaan",
   "engines": {
     "vscode": "^1.50.0"
   },
@@ -12,7 +13,7 @@
   "activationEvents": [
     "onCommand:extension.runProblem",
     "onCommand:extension.compileAndRunTestCases",
-    "onCommad:extension.addCustomTestCase"
+    "onCommand:extension.addCustomTestCase"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -32,10 +33,12 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -w -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "vscode:prepublish": "",
+    "compile": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahilmadaan048/cp-vs-helper.git"
   },
   "devDependencies": {
     "eslint": "^7.10.0",
