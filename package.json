@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:extension.runProblem",
-    "onCommand:extension.compileAndRunTestCases"
+    "onCommand:extension.compileAndRunTestCases",
+    "onCommad:extension.addCustomTestCase"
   ],
   "main": "./src/extension.js",
   "contributes": {
@@ -23,6 +24,10 @@
       {
         "command": "extension.compileAndRunTestCases",
         "title": "Compile and Run"
+      },
+      {
+        "command": "extension.addCustomTestCase",
+        "title": "Add Custom Test Case"
       }
     ]
   },
