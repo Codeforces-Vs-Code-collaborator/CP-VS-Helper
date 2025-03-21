@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
-const port = 10042;
+const port = process.env.PORT || 10042;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -15,9 +15,11 @@ app.post("/", async (req, res) => {
     if (!url) {
         return res.status(400).json({ message: "No URL provided!" });
     }
+    
     problemData = req.body;
-
     console.log("Received problem data:", problemData);
+    
+    res.json({ message: "Problem data received successfully!" });
 });
 
 app.get("/bodyData", (req, res) => {
@@ -27,9 +29,48 @@ app.get("/bodyData", (req, res) => {
     res.json(problemData);
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+// ✅ Added a default route for health checks
+app.get("/", (req, res) => {
+    res.send("Server is running! 🚀");
 });
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+
+// const express = require("express");
+// const bodyParser = require("body-parser");
+// const cors = require("cors");
+
+// const app = express();
+// const port = 10042;
+
+// app.use(cors());
+// app.use(bodyParser.json());
+
+// let problemData = null; 
+
+// app.post("/", async (req, res) => {
+//     const { url } = req.body;
+//     if (!url) {
+//         return res.status(400).json({ message: "No URL provided!" });
+//     }
+//     problemData = req.body;
+
+//     console.log("Received problem data:", problemData);
+// });
+
+// app.get("/bodyData", (req, res) => {
+//     if (!problemData) {
+//         return res.status(404).json({ message: "No problem data available!" });
+//     }
+//     res.json(problemData);
+// });
+
+// app.listen(port, () => {
+//     console.log(`Server is running on http://localhost:${port}`);
+// });
 
 
 // const express = require('express');
