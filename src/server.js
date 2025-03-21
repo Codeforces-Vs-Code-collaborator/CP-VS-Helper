@@ -29,7 +29,6 @@ app.get("/bodyData", (req, res) => {
     res.json(problemData);
 });
 
-// ✅ Added a default route for health checks
 app.get("/", (req, res) => {
     res.send("Server is running! 🚀");
 });
