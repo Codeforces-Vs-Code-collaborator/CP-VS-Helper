@@ -35,7 +35,8 @@
   },
   "scripts": {
     "vscode:prepublish": "",
-    "compile": ""
+    "compile": "",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
