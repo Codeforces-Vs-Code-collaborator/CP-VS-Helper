@@ -65,22 +65,36 @@ A **VS Code extension** that helps you fetch coding problems, generate boilerpla
 
 ## 🖼️ Screenshot
 
-*(Add a screenshot here showing the extension in action.)*
 - Use the Command **"Run Problem"** from the command palette(`Ctrl+Shift+P`)
+
 ![alt text](image.png)
+
 - Select the location where you want to store the Problem folder.
+
 ![alt text](image-1.png)
+
 - The **"solution.cpp"** file will open on it's own, user does not have to navigate to the problem folder.
+
 ![alt text](image-2.png)
+
 - Use the command **"Compile and Run"** from the command palette(`Ctrl+Shift+P`) to tun the test Cases on the written solution
+
 ![alt text](image-3.png)
+
 - The compilation of code is done and output for the input test Cases for the problem are run and the corresponding output gets printed in the Output
+
 ![alt text](image-4.png)
+
 - Use the Command **"Add Custom Test Case"** from the command palette(`Ctrl+Shift+P`) to add some custom Test Case to run on the problem.
+
 ![alt text](image-5.png)
-- A HTML page gets opened with input textAreas for both testCase input and testCase Output. Click on **"Submit"** button to add the input testCase to the testcases.txt file
+
+- A HTML page gets opened with input textAreas for both testCase input and testCase Output. Click on **"Submit"** button to add the input testCase to the 
+testcases.txt file
 ![alt text](image-6.png)
+
 - A file named **"testcases.txt"** get's created in the Problem Folder with the input test Case in it as soon as the **"Submit"** button is clicked
+
 ![alt text](image-7.png)---
 
 ## 📌 Contribution
