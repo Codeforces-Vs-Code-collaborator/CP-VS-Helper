@@ -15,15 +15,30 @@ A **VS Code extension** that helps you fetch coding problems, generate boilerpla
 ## 📂 Project Structure
 
 ```
-📁 your-extension/
-│── 📄 extension.js           # Main VS Code extension logic
-│── 📄 problemHandler.js      # Handles fetching and processing problems
-│── 📄 testRunner.js          # Manages compilation and test execution
-│── 📄 uiManager.js           # Handles UI elements like test case input
-│── 📄 utils.js               # Utility functions (file handling, formatting)
-│── 📄 package.json           # VS Code extension metadata
+📁 CP-VS-Helper/
+│── 📁 images/                # Stores images used in README and extension
+│── 📁 src/                   # Source code folder
+│   │── 📁 commands/          # Contains command scripts
+│   │   │── 📄 addCustomTestCase.js
+│   │   │── 📄 executeTestCases.js
+│   │   │── 📄 fetchProblemData.js
+│   │── 📁 utils/             # Utility functions
+│   │   │── 📄 extension.js   # Main VS Code extension logic
+│   │   │── 📄 server.js      # Handles server-related tasks
+│   │   │── 📄 state.js       # Manages extension state
+│   │   │── 📄 webview.js     # Manages webview components
+│── 📁 test/                  # Test-related files
+│── 📄 .gitignore             # Git ignored files
+│── 📄 .vscodeignore          # VSCE ignored files
+│── 📄 CHANGELOG.md           # Extension updates log
+│── 📄 eslint.config.mjs      # Linting configuration
 │── 📄 icon.png               # Extension icon
-│── 📄 README.md              # This file
+│── 📄 LICENSE.md             # License information
+│── 📄 package.json           # VS Code extension metadata
+│── 📄 package-lock.json      # Dependency lock file
+│── 📄 README.md              # Documentation
+│── 📄 vsc-extension-quickstart.md # VS Code extension quickstart guide
+
 ```
 
 ---

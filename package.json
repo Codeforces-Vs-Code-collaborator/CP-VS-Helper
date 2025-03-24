@@ -2,7 +2,7 @@
   "name": "cp-vs-helper",
   "displayName": "CP VS Helper",
   "description": "A VS Code extension to help with competitive programming",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "publisher": "SahilMadaan",
   "icon": "icon.png",
   "assets": {
@@ -14,7 +14,7 @@
       {"path": "images/compilation.png"},
       {"path": "images/addCustomeTestCase.png"},
       {"path": "images/takeCustomInput.png"},
-      {"path": "images/testcasesFileCreation.png"},
+      {"path": "images/testcasesFileCreation.png"}
     ]
   },
   "engines": {
@@ -67,14 +67,6 @@
     "node-fetch": "^2.7.0",
     "regex": "^6.0.1",
     "ws": "^8.5.0"
-    // "minimatch": "^10.0.1",
-    // "minimist": "^1.2.8",
-    // "mkdirp": "^3.0.1",
-    // "mocha": "^11.1.0",
-    // "playwright": "^1.51.0",
-    // "puppeteer": "^24.4.0",
-    // "puppeteer-extra": "^3.3.6",
-    // "puppeteer-extra-plugin-stealth": "^2.11.2",
   },
   "type": "commonjs"
 }
