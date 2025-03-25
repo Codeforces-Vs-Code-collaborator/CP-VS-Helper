@@ -54,7 +54,7 @@ int main() {
 
 async function fetchProblemData() {
   try {
-    const response = await axios.get("http://localhost:10042/bodyData");
+    const response = await axios.get("https://cp-code-runner.onrender.com/bodyData");
     await processProblemData(response.data);
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");

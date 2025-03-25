@@ -1,0 +1,72 @@
+{
+  "name": "cp-vs-helper",
+  "displayName": "CP VS Helper",
+  "description": "A VS Code extension to help with competitive programming",
+  "version": "0.0.5",
+  "publisher": "SahilMadaan",
+  "icon": "icon.png",
+  "assets": {
+    "screenshots": [
+      {"path": "images/runProblem.png"},
+      {"path": "images/selectLocation.png"},
+      {"path": "images/openSolution.png"},
+      {"path": "images/compileAndRun.png"},
+      {"path": "images/compilation.png"},
+      {"path": "images/addCustomeTestCase.png"},
+      {"path": "images/takeCustomInput.png"},
+      {"path": "images/testcasesFileCreation.png"}
+    ]
+  },
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.runProblem",
+    "onCommand:extension.compileAndRunTestCases",
+    "onCommand:extension.addCustomTestCase"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.runProblem",
+        "title": "Run Problem"
+      },
+      {
+        "command": "extension.compileAndRunTestCases",
+        "title": "Compile and Run"
+      },
+      {
+        "command": "extension.addCustomTestCase",
+        "title": "Add Custom Test Case"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "",
+    "compile": "",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahilmadaan048/cp-vs-helper.git"
+  },
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "typescript": "^4.0.3",
+    "vscode": "^1.1.34"
+  },
+  "dependencies": {
+    "axios": "^1.8.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "node-fetch": "^2.7.0",
+    "regex": "^6.0.1",
+    "ws": "^8.5.0"
+  },
+  "type": "commonjs"
+}
