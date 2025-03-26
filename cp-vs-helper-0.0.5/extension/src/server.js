@@ -1,112 +1,131 @@
+// server.js
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const vscode = require("vscode"); // Added to show notifications from server
 
 const app = express();
-const port = process.env.PORT || 10042;
+const DEFAULT_PORT = 10042;
+let currentPort = DEFAULT_PORT;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-let problemData = null; 
+let problemData = null;
+let server = null;
 
 app.post("/", async (req, res) => {
+  try {
     const { url } = req.body;
     if (!url) {
-        return res.status(400).json({ message: "No URL provided!" });
+      return res.status(400).json({ message: "No URL provided!" });
     }
-    
+
     problemData = req.body;
     console.log("Received problem data:", problemData);
-    
+
     res.json({ message: "Problem data received successfully!" });
+  } catch (error) {
+    console.error("Error handling POST request:", error);
+    vscode.window.showErrorMessage(`Server error: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 app.get("/bodyData", (req, res) => {
+  try {
     if (!problemData) {
-        return res.status(404).json({ message: "No problem data available!" });
+      return res.status(404).json({ message: "No problem data available!" });
     }
     res.json(problemData);
+  } catch (error) {
+    console.error("Error handling GET request:", error);
+    vscode.window.showErrorMessage(`Server error: ${error.message}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 app.get("/", (req, res) => {
-    res.send("Server is running! 🚀");
+  res.send("CodeAide server is running! 🚀");
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+  vscode.window.showErrorMessage(`Server error: ${err.message}`);
+  res.status(500).json({ error: "Internal server error" });
 });
 
+/**
+ * Starts the Express server
+ * @param {number} [port=DEFAULT_PORT] - Port to start server on
+ * @returns {Promise<void>}
+ */
+function startServer(port = DEFAULT_PORT) {
+  return new Promise((resolve, reject) => {
+    if (server) {
+      vscode.window.showWarningMessage("Server is already running");
+      return resolve();
+    }
 
-// const express = require("express");
-// const bodyParser = require("body-parser");
-// const cors = require("cors");
+    currentPort = port;
+    server = app.listen(port, "127.0.0.1", () => {
+      console.log(`Server is running on port ${port}`);
+      vscode.window.showInformationMessage(`CodeAide server started on port ${port}`);
+      resolve();
+    });
 
-// const app = express();
-// const port = 10042;
+    server.on("error", (err) => {
+      server = null;
+      console.error("Server error:", err);
+      
+      let userMessage = `Failed to start server: ${err.message}`;
+      if (err.code === 'EADDRINUSE') {
+        userMessage = `Port ${port} is already in use. Please try another port.`;
+      }
+      
+      vscode.window.showErrorMessage(`CodeAide: ${userMessage}`, { modal: true });
+      reject(err);
+    });
+  });
+}
 
-// app.use(cors());
-// app.use(bodyParser.json());
+/**
+ * Stops the running Express server
+ * @returns {Promise<void>}
+ */
+function stopServer() {
+  return new Promise((resolve, reject) => {
+    if (!server) {
+      vscode.window.showWarningMessage("No server is currently running");
+      return resolve();
+    }
 
-// let problemData = null; 
+    server.close((err) => {
+      if (err) {
+        console.error("Error stopping server:", err);
+        vscode.window.showErrorMessage(`Failed to stop server: ${err.message}`);
+        return reject(err);
+      }
 
-// app.post("/", async (req, res) => {
-//     const { url } = req.body;
-//     if (!url) {
-//         return res.status(400).json({ message: "No URL provided!" });
-//     }
-//     problemData = req.body;
+      server = null;
+      console.log(`Server on port ${currentPort} stopped`);
+      vscode.window.showInformationMessage(`CodeAide server stopped`);
+      resolve();
+    });
+  });
+}
 
-//     console.log("Received problem data:", problemData);
-// });
+/**
+ * Get current server port
+ * @returns {number}
+ */
+function getCurrentPort() {
+  return currentPort;
+}
 
-// app.get("/bodyData", (req, res) => {
-//     if (!problemData) {
-//         return res.status(404).json({ message: "No problem data available!" });
-//     }
-//     res.json(problemData);
-// });
-
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
-
-
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
-
-// const app = express();
-// const port = 10048;
-
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// let problemData = null; //to store the problem data
-// let reqArr = [];
-
-// app.post('/', async (req, res) => {
-//     const { url } = req.body;
-
-//     if (!url) {
-//         return res.status(400).json({ message: "No URL provided!" });
-//     }
-
-//     problemData = req.body; // this will be needed in the extenion.js file
-//     reqArr.push(problemData); //
-
-//     // console.log("Received problem data:", problemData);
-//     console.log("All requests so far: ", reqArr);
-//     res.json(reqArr);
-// });
-
-// app.get('/bodyData', (req, res) => {
-//     if (reqArr.length === 0) {
-//         return res.status(404).json({ message: "No problem data available!" });
-//     }
-//     res.json(reqArr);  // send the stored data in json format
-// });
-
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${port}`);
-// });
+module.exports = {
+  startServer,
+  stopServer,
+  getCurrentPort
+};

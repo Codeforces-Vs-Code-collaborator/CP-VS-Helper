@@ -82,36 +82,36 @@ A **VS Code extension** that helps you fetch coding problems, generate boilerpla
 
 - Use the Command **"Run Problem"** from the command palette(`Ctrl+Shift+P`)
 
-![alt text](images/runProblem.png)
+![](images/runProblem.png)
 
 - Select the location where you want to store the Problem folder.
 
-![alt text](images/selectLocation.png)
+![](images/selectLocation.png)
 
 - The **"solution.cpp"** file will open on it's own, user does not have to navigate to the problem folder.
 
-![alt text](images/openSolution.png)
+![](images/openSolution.png)
 
 - Use the command **"Compile and Run"** from the command palette(`Ctrl+Shift+P`) to tun the test Cases on the written solution
 
-![alt text](images/compileAndRun.png)
+![](images/compileAndRun.png)
 
 - The compilation of code is done and output for the input test Cases for the problem are run and the corresponding output gets printed in the Output
 
-![alt text](images/compilation.png)
+![](images/compilation.png)
 
 - Use the Command **"Add Custom Test Case"** from the command palette(`Ctrl+Shift+P`) to add some custom Test Case to run on the problem.
 
-![alt text](images/addCustomeTestCase.png)
+![](images/addCustomeTestCase.png)
 
 - A HTML page gets opened with input textAreas for both testCase input and testCase Output. Click on **"Submit"** button to add the input testCase to the 
 testcases.txt file
 
-![alt text](images/takeCustomInput.png)
+![](images/takeCustomInput.png)
 
 - A file named **"testcases.txt"** get's created in the Problem Folder with the input test Case in it as soon as the **"Submit"** button is clicked
 
-![alt text](images/testcasesFileCreation.png)---
+![](images/testcasesFileCreation.png)---
 
 ## 📌 Contribution
 

@@ -61,10 +61,6 @@ async function fetchProblemData() {
   try {
     const response = await axios.get("https://aeec-14-139-61-131.ngrok-free.app/bodydata");
     await processProblemData(response.data);
-
-    fetchProblemData()
-      .then(processProblemData)
-      .catch((error) => console.error(error));
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
   }
