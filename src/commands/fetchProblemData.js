@@ -3,11 +3,14 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 const state = require("../state");
+const net = require("net");
 
 async function processProblemData(jsonData) {
   state.outputChannel.appendLine("inside the process problem data");
   if (!jsonData || !jsonData.name || !jsonData.tests) {
-    state.outputChannel.appendLine("Invalid problem data received: " + JSON.stringify(jsonData));
+    state.outputChannel.appendLine(
+      "Invalid problem data received: " + JSON.stringify(jsonData)
+    );
     return;
   }
 
@@ -29,7 +32,9 @@ async function processProblemData(jsonData) {
 
   if (!fs.existsSync(state.workspacePath)) {
     fs.mkdirSync(state.workspacePath, { recursive: true });
-    state.outputChannel.appendLine("Created workspace folder: " + state.workspacePath);
+    state.outputChannel.appendLine(
+      "Created workspace folder: " + state.workspacePath
+    );
   }
 
   const solutionPath = path.join(state.workspacePath, "solution.cpp");
@@ -54,8 +59,12 @@ int main() {
 
 async function fetchProblemData() {
   try {
-    const response = await axios.get("https://b1e0-14-139-61-131.ngrok-free.app/bodyData");
+    const response = await axios.get("https://aeec-14-139-61-131.ngrok-free.app/bodydata");
     await processProblemData(response.data);
+
+    fetchProblemData()
+      .then(processProblemData)
+      .catch((error) => console.error(error));
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
   }

@@ -90,7 +90,7 @@ async function executeTestCases(jsonData) {
 
 async function fetchDataToExecute() {
   try {
-    const response = await axios.get("https://b1e0-14-139-61-131.ngrok-free.app/bodyData");
+    const response = await axios.get("https://aeec-14-139-61-131.ngrok-free.app/bodydata");
     await executeTestCases(response.data);
   } catch (error) {
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
