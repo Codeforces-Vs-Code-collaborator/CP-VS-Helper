@@ -125,7 +125,10 @@ MIT License
 
 ---
 
-[![Watch the video](https://www.youtube.com/watch?v=8RN-aKQ_NTQ)]
+## 🎥 Demo Video
+
+[![Watch the video](https://img.youtube.com/vi/8RN-aKQ_NTQ/0.jpg)](https://www.youtube.com/watch?v=8RN-aKQ_NTQ)
+
 
 
 
