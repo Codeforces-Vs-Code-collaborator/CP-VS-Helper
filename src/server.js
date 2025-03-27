@@ -1,18 +1,16 @@
-// server.js
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const vscode = require("vscode"); // Added to show notifications from server
+const vscode = require("vscode"); 
 
 const app = express();
-const DEFAULT_PORT = 10042;
-let currentPort = DEFAULT_PORT;
+const SUPPORTED_PORTS = [4244, 6174, 10042, 10043, 10045, 27121];
+let currentPort = null;
+let server = null;
+let problemData = null;
 
 app.use(cors());
 app.use(bodyParser.json());
-
-let problemData = null;
-let server = null;
 
 app.post("/", async (req, res) => {
   try {
@@ -57,42 +55,41 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * Starts the Express server
- * @param {number} [port=DEFAULT_PORT] - Port to start server on
- * @returns {Promise<void>}
+ * Starts the Express server on an available port
  */
-function startServer(port = DEFAULT_PORT) {
-  return new Promise((resolve, reject) => {
-    if (server) {
-      vscode.window.showWarningMessage("Server is already running");
-      return resolve();
+async function startServer() {
+  for (const port of SUPPORTED_PORTS) {
+    try {
+      await new Promise((resolve, reject) => {
+        server = app.listen(port, "127.0.0.1", () => {
+          currentPort = port;
+          console.log(`✅ Server running on port ${port}`);
+          vscode.window.showInformationMessage(`CodeAide server started on port ${port}`);
+          resolve();
+        });
+
+        server.on("error", (err) => {
+          if (err.code === "EADDRINUSE") {
+            console.warn(`⚠ Port ${port} in use, trying next...`);
+            reject(err);
+          } else {
+            reject(err);
+          }
+        });
+      });
+      break; // Stop trying once a port is found
+    } catch (error) {
+      continue; // Try next port
     }
+  }
 
-    currentPort = port;
-    server = app.listen(port, "127.0.0.1", () => {
-      console.log(`Server is running on port ${port}`);
-      vscode.window.showInformationMessage(`CodeAide server started on port ${port}`);
-      resolve();
-    });
-
-    server.on("error", (err) => {
-      server = null;
-      console.error("Server error:", err);
-      
-      let userMessage = `Failed to start server: ${err.message}`;
-      if (err.code === 'EADDRINUSE') {
-        userMessage = `Port ${port} is already in use. Please try another port.`;
-      }
-      
-      vscode.window.showErrorMessage(`CodeAide: ${userMessage}`, { modal: true });
-      reject(err);
-    });
-  });
+  if (!server) {
+    vscode.window.showErrorMessage("❌ Failed to start server: No available ports.");
+  }
 }
 
 /**
  * Stops the running Express server
- * @returns {Promise<void>}
  */
 function stopServer() {
   return new Promise((resolve, reject) => {
@@ -108,9 +105,9 @@ function stopServer() {
         return reject(err);
       }
 
-      server = null;
-      console.log(`Server on port ${currentPort} stopped`);
+      console.log(`🛑 Server on port ${currentPort} stopped`);
       vscode.window.showInformationMessage(`CodeAide server stopped`);
+      server = null;
       resolve();
     });
   });
@@ -118,14 +115,9 @@ function stopServer() {
 
 /**
  * Get current server port
- * @returns {number}
  */
 function getCurrentPort() {
   return currentPort;
 }
 
-module.exports = {
-  startServer,
-  stopServer,
-  getCurrentPort
-};
+module.exports = { startServer, stopServer, getCurrentPort };

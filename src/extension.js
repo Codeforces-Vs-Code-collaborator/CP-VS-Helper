@@ -5,40 +5,24 @@ const { addCustomTestCase } = require("./commands/addCustomTestCase");
 const state = require("./state");
 const { startServer, stopServer } = require("./server");
 
-function activate(context) {
+async function activate(context) {
   state.outputChannel.show();
   console.log("Extension activated.");
 
-  // Start the Express server on port 10042
-  startServer()
-    .then(() => {
-      console.log("Local server started on port 10042");
-      vscode.window.showInformationMessage(
-        "CodeAide: Local server started successfully on port 10042",
-        { modal: false }
-      );
-    })
-    .catch((err) => {
-      console.error("Error starting local server:", err);
-      
-      let errorMessage = `Failed to start local server: ${err.message}`;
-      if (err.code === 'EADDRINUSE') {
-        errorMessage = `Port 10042 is already in use. Please close the conflicting application or configure CodeAide to use a different port.`;
-      }
-      
-      vscode.window.showErrorMessage(
-        `CodeAide: ${errorMessage}`,
-        { modal: true, detail: "The extension may not function properly without the local server." }
-      ).then(selection => {
-        if (selection === 'Configure Port') {
-          vscode.window.showInputBox({
-            prompt: "Enter alternative port number",
-            value: "10042"
-          }).then(newPort => {
-          });
-        }
-      });
-    });
+  try {
+    await startServer();
+    console.log(`Local server started on port 10042`);
+    vscode.window.showInformationMessage(
+      `CodeAide: Local server started successfully on port 10042`,
+      { modal: false }
+    );
+  } catch (err) {
+    console.error("Error starting local server:", err);
+    vscode.window.showErrorMessage(
+      `CodeAide: Failed to start local server: ${err.message}`,
+      { modal: false }
+    );
+  }
 
   // Register commands
   let runProblemCommand = vscode.commands.registerCommand("extension.runProblem", fetchProblemData);
@@ -49,44 +33,26 @@ function activate(context) {
     runProblemCommand,
     compileAndRunTestCases,
     addCustomTestCaseCommand,
-    {
-      dispose: () => {
-        stopServer()
-          .then(() => {
-            vscode.window.showInformationMessage(
-              "CodeAide: Local server stopped",
-              { modal: false }
-            );
-          })
-          .catch((err) => {
-            console.error("Error stopping server:", err);
-            vscode.window.showErrorMessage(
-              "CodeAide: Error stopping local server",
-              { modal: false }
-            );
-          });
-      }
-    }
+    new vscode.Disposable(() => stopServer().catch(console.error))
   );
 }
 
-function deactivate() {
+async function deactivate() {
   if (state.outputChannel) {
     state.outputChannel.dispose();
   }
-  
-  stopServer()
-    .then(() => {
-      console.log("Server stopped during deactivation");
-    })
-    .catch((err) => {
-      console.error("Error stopping server during deactivation:", err);
-      vscode.window.showErrorMessage(
-        "CodeAide: Error stopping local server during deactivation",
-        { modal: false }
-      );
-    });
-  
+
+  try {
+    await stopServer();
+    console.log("Server stopped during deactivation");
+  } catch (err) {
+    console.error("Error stopping server during deactivation:", err);
+    vscode.window.showErrorMessage(
+      "CodeAide: Error stopping local server during deactivation",
+      { modal: false }
+    );
+  }
+
   console.log("Extension deactivated.");
 }
 

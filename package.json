@@ -2,7 +2,7 @@
   "name": "cp-vs-helper",
   "displayName": "CP VS Helper",
   "description": "A VS Code extension to help with competitive programming",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "SahilMadaan",
   "icon": "icon.png",
   "assets": {

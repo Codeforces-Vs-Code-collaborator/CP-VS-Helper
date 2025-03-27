@@ -59,9 +59,10 @@ int main() {
 
 async function fetchProblemData() {
   try {
-    const response = await axios.get("https://aeec-14-139-61-131.ngrok-free.app/bodydata");
+    const response = await axios.get("http://127.0.0.1:10042/bodydata");
     await processProblemData(response.data);
   } catch (error) {
+    vscode.window.showErrorMessage("fetchProblemData in fetchProblemData.");
     vscode.window.showErrorMessage("Failed to fetch problem data from server.");
   }
 }
