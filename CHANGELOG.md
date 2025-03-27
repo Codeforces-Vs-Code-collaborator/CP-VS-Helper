@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.9] - Initial Release
+## [1.0.0] - Initial Release
 ### Added
 - 🚀 **Fetch Problem**: Retrieve coding problems from a local server and generate files automatically.
 - 📝 **Boilerplate Code Generator**: Creates a `solution.cpp` file with a predefined template.

@@ -4,7 +4,7 @@ const cors = require("cors");
 const vscode = require("vscode"); 
 
 const app = express();
-const SUPPORTED_PORTS = [4244, 6174, 10042, 10043, 10045, 27121];
+const SUPPORTED_PORTS = [10042];
 let currentPort = null;
 let server = null;
 let problemData = null;
