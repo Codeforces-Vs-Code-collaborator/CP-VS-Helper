@@ -114,13 +114,14 @@ testcases.txt file
 ![](images/testcasesFileCreation.png)---
 
 
-## 🎥 Demo Video (Windows)  
+# 🎥 Demo Video (Windows)  
 
-[![Watch the video](https://img.youtu.be/qkgjZlhqMbk/0.jpg)](https://youtu.be/qkgjZlhqMbk)  
+[![Watch the video](https://img.youtube.com/vi/qkgjZlhqMbk/0.jpg)](https://youtu.be/qkgjZlhqMbk)  
 
 Click the image above or [watch the demo video here](https://youtu.be/qkgjZlhqMbk).  
 
----  
+---
+
 
 ## 📌 Contribution
 
