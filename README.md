@@ -116,7 +116,7 @@ testcases.txt file
 ## 🎥 Demo Video (Windows)
 
 <video width="600" controls>
-  <source src="./demoVideo.mp4" type="video/mp4">
+  <source src="https://youtu.be/6pFhyz4RvOY" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
@@ -130,7 +130,6 @@ Want to improve this extension? Feel free to submit issues or PRs!
 ## 📜 License
 
 MIT License
-
 
 
 Let me know if you need modifications! 🚀
