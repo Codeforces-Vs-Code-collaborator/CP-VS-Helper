@@ -113,18 +113,24 @@ testcases.txt file
 
 ![](images/testcasesFileCreation.png)---
 
+## 🎥 Demo Video (Windows)
+
+<video width="600" controls>
+  <source src="./demoVideo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## 📌 Contribution
 
 Want to improve this extension? Feel free to submit issues or PRs!
 
+---
 ---
 
 ## 📜 License
 
 MIT License
 
----
-## 🎥 Demo Video (Windows)
-![Demo Video](./demoVideo.mp4)
+
 
 Let me know if you need modifications! 🚀
