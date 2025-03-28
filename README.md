@@ -116,9 +116,9 @@ testcases.txt file
 
 ## 🎥 Demo Video (Windows)  
 
-[![Watch the video](https://img.youtube.com/vi/6pFhyz4RvOY/0.jpg)](https://youtu.be/6pFhyz4RvOY)  
+[![Watch the video](https://img.youtu.be/qkgjZlhqMbk/0.jpg)](https://youtu.be/qkgjZlhqMbk)  
 
-Click the image above or [watch the demo video here](https://youtu.be/6pFhyz4RvOY).  
+Click the image above or [watch the demo video here](https://youtu.be/qkgjZlhqMbk).  
 
 ---  
 
