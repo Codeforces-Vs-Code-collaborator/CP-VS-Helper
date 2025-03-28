@@ -124,6 +124,8 @@ Want to improve this extension? Feel free to submit issues or PRs!
 MIT License
 
 ---
+## 🎥 Demo Video (Windows)
+![Demo Video](./demoVideo.gif)
 
 ## 🎥 Demo Video
 

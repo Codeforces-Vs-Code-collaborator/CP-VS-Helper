@@ -52,7 +52,6 @@ async function deactivate() {
       { modal: false }
     );
   }
-
   console.log("Extension deactivated.");
 }
 
