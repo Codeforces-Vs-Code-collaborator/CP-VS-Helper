@@ -125,13 +125,6 @@ MIT License
 
 ---
 ## 🎥 Demo Video (Windows)
-![Demo Video](./demoVideo.gif)
-
-## 🎥 Demo Video
-
-[![Watch the video](https://img.youtube.com/vi/8RN-aKQ_NTQ/0.jpg)](https://www.youtube.com/watch?v=8RN-aKQ_NTQ)
-
-
-
+![Demo Video](./demoVideo.mp4)
 
 Let me know if you need modifications! 🚀
