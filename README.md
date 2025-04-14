@@ -47,7 +47,7 @@ A **VS Code extension** that helps you fetch coding problems, generate boilerpla
 
 1. **Clone this repository:**
    ```sh
-   git@github.com:Codeforces-Vs-Code-collaborator/CP-VS-Helper.git
+   git clone https://github.com/Codeforces-Vs-Code-collaborator/CP-VS-Helper.git
    cd CP-VS-Helper
    ```
 
