@@ -124,7 +124,7 @@ Click the image above or [watch the demo video here](https://youtu.be/qkgjZlhqMb
 
 
 ## 📌 Contribution
-
+This would not have been possible without the valuable time and effort put in by both the team members including me and Aiyaan Mahajan.
 Want to improve this extension? Feel free to submit issues or PRs!
 
 ---
